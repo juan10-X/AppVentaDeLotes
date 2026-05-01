@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Lote Seguro",
+    "slug": "appLote",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/splash-iconn.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    
+    "splash": {
+      "image": "./assets/splash-iconn.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#09caba"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/splash-iconn.png",
+        "backgroundColor": "#09caba"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    
+    "web": {
+      "favicon": "./assets/splash-iconn.png"
+    },
+    "plugins": [
+      "expo-video"
+    ]
+  }
+}

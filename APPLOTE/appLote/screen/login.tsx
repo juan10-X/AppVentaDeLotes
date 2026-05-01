@@ -1,0 +1,218 @@
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
+import React, { useState } from "react";
+import { Video } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Feather from "@expo/vector-icons/Feather";
+import loginCambiarContraseña from "./Login/loginCambiarContraseña";
+
+const API_URL = "http://10.55.241.207:90";
+const login = ({ navigation }) => {
+  const [Correo, setEmail] = useState("");
+  const [Contraseña, setPassword] = useState("");
+
+  const [loading, setloading] = useState(false);
+  const [icon, seticon] = useState(false);
+
+  const handleLogin = async () => {
+    if (!Correo.trim() || !Contraseña.trim()) {
+      alert("Por favor, complete todos los campos");
+      return;
+    }
+
+    setloading(true);
+
+    try {
+      const [reslogin, resactualizacion] = await Promise.all([
+        fetch(`${API_URL}/Usuario/usuario_Login/${Correo}/${Contraseña}`),
+        fetch(`${API_URL}/Lote/lote_ActualizarEstadoMasivo`),
+      ]);
+
+      const data = await reslogin.json();
+
+      if (data && data.length > 0) {
+        const usuario = data[0];
+        const idUsuario = usuario.IdUsuario || usuario.idUsuario || usuario.Id || usuario.id;
+        navigation.replace("MainTabs", {
+          rol: usuario.TipoUsuario,
+          nombre: usuario.Nombre,
+          idUsuario,
+        });
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
+    } catch (error) {
+      alert("Error al iniciar sesión");
+    } finally {
+      setloading(false);
+    }
+  };
+
+  return (
+    <LinearGradient
+      colors={["#069488", "#a1f3ec", "#069488"]}
+      style={styles.contenedor}
+    >
+      <View style={styles.card}>
+        <Image source={require("../img/logoLote.webp")} style={styles.logo} />
+        <View style={{alignItems:'center',marginBottom:20}}>
+          <Text style={styles.title}>Bienvenido</Text>
+          <Text style={styles.subtitle}>Aplicativo de venta de Lotes, Tu lote seguro</Text>
+        </View>
+        
+
+        <View style={styles.textInput}>
+          <AntDesign name="user" size={24} color="#09caba" />
+          <TextInput
+            autoCapitalize="none"
+            keyboardType="email-addres"
+            autoCorrect={false}
+            style={styles.inputcontrol}
+            placeholder="Email"
+            value={Correo}
+            onChangeText={(text) => setEmail(text)}
+          />
+        </View>
+
+        <View style={styles.textInput}>
+          <Feather name="lock" size={24} color="#09caba" />
+          <TextInput
+            secureTextEntry={!icon}
+            style={styles.inputcontrol}
+            placeholder="Password"
+            value={Contraseña}
+            onChangeText={(text) => setPassword(text)}
+            placeholderTextColor={"gray"}
+          />
+          <AntDesign
+            name={icon ? "eye" : "eye-invisible"}
+            size={24}
+            color={icon ? "black" : "gray"}
+            onPress={() => seticon(!icon)}
+            style={styles.imgkey}
+          />
+        </View>
+        <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+          <Text>Iniciar Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.btnR}
+          onPress={() => navigation.replace("loginRegistrate")}
+        >
+          <Text style={styles.btnText}>
+            ¿No tienes una cuenta? Registrate aqui...
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.btnCambiar}
+          onPress={() => navigation.replace("loginCambiarContraseña")}
+        >
+          <Text style={styles.btnText}>
+            No puedes acceder?, Contactanos aqui.
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
+  );
+};
+const styles = StyleSheet.create({
+  contenedor: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  card: {
+    position: "absolute",
+    bottom: 40,
+    left: 20,
+    width: "90%",
+    height: "85%",
+    backgroundColor: "#a1f3ec",
+    borderRadius: 10,
+    padding: 20,
+    boxShadow:
+      "-4px 4px 4px -4px rgba(0, 0, 0, 0.1), -4px 4px 4px 4px rgba(0, 0, 0, 0.06)",
+  },
+  title:{
+    color:'#000000',
+    fontSize:35,
+    fontWeight:'bold'
+    
+  },
+  subtitle:{
+    color:'#000000',
+    fontSize:15
+    
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    alignSelf: "center",
+    borderRadius: 40,
+    borderWidth: 4,
+    borderColor:"#09caba" ,
+    padding: 80,
+    margin: 30,
+    marginBottom: 15,
+  },
+  textInput: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    paddingLeft: 10,
+    borderRadius: 15,
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  inputcontrol: {
+    flex: 1,
+    height: 44,
+
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    fontSize: 15,
+    fontWeight: "500",
+    color: "#222",
+  },
+  imgkey: {
+    marginRight: 12,
+    fontSize: 25,
+    alignSelf: "center",
+  },
+  btn: {
+    height: 44,
+    backgroundColor: "#09caba",
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  btnCambiar: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 60,
+    marginTop: "auto",
+    alignContent: "flex-end",
+  },
+  btnText: {
+    fontWeight: "bold",
+    color: "#069488",
+  },
+  btnR: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 60,
+    marginTop: 15,
+  },
+});
+
+export default login;
