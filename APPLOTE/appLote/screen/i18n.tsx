@@ -4,7 +4,7 @@ import React from 'react'
 const i18n = () => {
   return (
     <View>
-      <Text>i18n</Text>
+      <Text>holas</Text>
     </View>
   )
 }
