@@ -50,6 +50,7 @@ export default function App() {
         <Stack.Screen name="MainTabs" component={bottomTabs} />
       </Stack.Navigator>
     </NavigationContainer>
+    
   );
 }
 
