@@ -9,7 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 
-const API_URL = "http://10.55.241.207:90";
+const API_URL = "http://10.90.221.207:90";
 
 const proyectos = ({ navigation, route }) => {
   const { nombre, rol, idUsuario } = route.params || {};

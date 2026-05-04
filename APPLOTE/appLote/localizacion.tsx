@@ -20,8 +20,13 @@ export  const traslations={
         titleSuport:"Click on any of our available        numbers:",
         msjbss:"Business hours 8:00am - 5:00pm.",
         Incharge:"In charge",
-
-
+        // texto bottomtabs
+        btDashboard:"Dashboard",
+        btProyectos:"Projects",
+        btusuario:"Users",
+        btAsesor:"Advisors",
+        btcliente:"Customers",
+        btVentas:"Sales"
     },
 
     es:{
@@ -45,6 +50,13 @@ export  const traslations={
         titleSuport:"Haz clik en cualquiera de nuestros numeros disponibles:",
         msjbss:"Horario de atencion 8:00am - 5:00pm.",
         Incharge:"Encargado",
+        // texto bottomtabs
+        btDashboard:"Panel",
+        btProyectos:"Proyectos",
+        btusuario:"Usuarios",
+        btAsesor:"Asesores",
+        btcliente:"Clientes",
+        btVentas:"Ventas"
 
     }
 }

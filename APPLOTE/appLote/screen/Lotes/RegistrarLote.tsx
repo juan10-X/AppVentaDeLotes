@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-const API_URL = "http://10.55.241.207:90";
+const API_URL = "http://10.90.221.207:90";
 
 const RegistrarLote = ({ route, navigation }) => {
   const { idProyecto, onRefresh } = route.params || {};

@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from '@react-navigation/native';
 
-const API_URL = "http://10.55.241.207:90";
+const API_URL = "http://10.90.221.207:90";
 
 const asesor = ({ navigation, route }) => {
   const { nombre, rol } = route.params || {};

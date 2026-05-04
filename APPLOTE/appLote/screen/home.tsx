@@ -17,7 +17,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
 const screenWidth = Dimensions.get("window").width;
 
-const API_URL = "http://10.55.241.207:90";
+const API_URL = "http://10.90.221.207:90";
 
 const home = ({ route, navigation }) => {
   const tabBarHeight = useBottomTabBarHeight();

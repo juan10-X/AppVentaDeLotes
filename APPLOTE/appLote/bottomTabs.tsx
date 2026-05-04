@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -12,6 +12,7 @@ import clientes from "./screen/clientes";
 import asesor from "./screen/asesor";
 import Ventas from "./screen/Ventas";
 import login from "./screen/login";
+import i18n from "./i18n";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +28,7 @@ const bottomTabs = ({ route }) => {
     >
       {rol !== "Cliente" && (
         <Tab.Screen
-          name="Home"
+          name={i18n.t("btDashboard")}
           component={home}
           initialParams={{ rol, nombre, idUsuario }}
           options={{
@@ -42,7 +43,7 @@ const bottomTabs = ({ route }) => {
         />
       )}
       <Tab.Screen
-        name="Proyectos"
+        name={i18n.t("btProyectos")}
         component={ListarProyectos}
         initialParams={{ rol, nombre, idUsuario }}
         options={{
@@ -57,7 +58,7 @@ const bottomTabs = ({ route }) => {
       />
       {rol !== "Cliente" && (
         <Tab.Screen
-         name="Asesor"
+         name={i18n.t("btAsesor")}
          component={asesor}
          initialParams={{ rol, nombre, idUsuario }}
          options={{
@@ -74,7 +75,7 @@ const bottomTabs = ({ route }) => {
       )}
       {rol !== "Cliente" && (
         <Tab.Screen
-          name="Clientes"
+          name={i18n.t("btcliente")}
           component={clientes}
           initialParams={{ rol, nombre, idUsuario }}
           options={{
@@ -91,7 +92,7 @@ const bottomTabs = ({ route }) => {
       )}
      
       <Tab.Screen
-        name="Ventas"
+        name={i18n.t("btVentas")}
         component={Ventas}
         initialParams={{ rol, nombre, idUsuario }}
         options={{

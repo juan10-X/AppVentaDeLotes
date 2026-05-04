@@ -14,7 +14,7 @@ import Papa from "papaparse";
 import { useFocusEffect } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
-const API_URL = "http://10.55.241.207:90"; // Tu IP de laptop
+const API_URL = "http://10.90.221.207:90"; // Tu IP de laptop
 
 const DetalleProyecto = ({ route, navigation }) => {
   const { urlCSV, info } = route.params;

@@ -10,9 +10,24 @@ import {
 import React, { useState, useEffect, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-const API_URL = "http://10.55.241.207:90";
+// imports para idiomas 
+import Fontisto from "@expo/vector-icons/Fontisto";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import i18n, {changeLanguage} from "../../i18n";
+import { Languages } from "../../localizacion";
+
+const API_URL = "http://10.90.221.207:90";
 
 const ListarProyectos = ({ navigation, route }) => {
+const [isMenuOpen, setIsMenuOpen] = useState(false);
+ // funcion de idiomas 
+  const [language,setlanguage] = useState<Languages>("es");
+  const handlechangeLanguage = ()=> {
+    const lang: Languages = language === "en" ? "es" :"en";
+    changeLanguage(lang);
+    setlanguage(lang);
+  }
+
   const { nombre, rol, idUsuario, onRefresh } = route.params || {};
   {
   }
@@ -78,6 +93,11 @@ const ListarProyectos = ({ navigation, route }) => {
       routes: [{ name: "Login" }], // Cambia 'Login' por el nombre exacto de tu pantalla inicial
     });
   };
+
+
+ 
+
+
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
@@ -86,12 +106,47 @@ const ListarProyectos = ({ navigation, route }) => {
           <Text style={styles.textheader2}>{nombre || "Usuario"}</Text>
         </View>
 
-        <TouchableOpacity style={styles.btnsalir} onPress={cerrarSesion}>
-          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>
-            salir
-          </Text>
-        </TouchableOpacity>
+        
       </View>
+  {/* ///////////////////////////////////////////////////////////////////////////////////////// */}
+  {/* funcion de boton desplegable patra idioma y exit */}
+
+      <View style={styles.containerFlotante}>
+        <TouchableOpacity 
+          style={styles.btnPrincipal} 
+          onPress={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <MaterialIcons 
+          name={isMenuOpen ? "close" : "menu"} // Puedes usar menu/close o flechas
+          size={28} 
+          color="white" 
+          />
+        </TouchableOpacity>
+        {isMenuOpen && (
+          <View style={styles.menuDesplegado}>
+
+            <View>
+              <TouchableOpacity style={styles.idioma} onPress={handlechangeLanguage}>
+                <Fontisto name="world-o" size={25}/>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity style={styles.btnsalir} onPress={cerrarSesion}>
+                <MaterialIcons
+                name="exit-to-app"
+                size={28}
+                color="white"
+                />
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        )}
+        
+      </View>
+  {/* ///////////////////////////////////////////////////////////////////////////////////////// */}
+
+
       <View></View>
       <Text style={styles.title}>Gestion de Proyectos:</Text>
       <Text style={styles.subtitle}>Selecciona un Proyecto:</Text>
@@ -190,6 +245,63 @@ const ListarProyectos = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+
+// estilos para boton desplegable
+  containerFlotante: {
+    position: 'absolute',
+    top: 50,           // Ajusta según la pantalla
+    right: 20,
+    zIndex: 999,       // Siempre al frente
+    alignItems: 'center',
+    
+    
+  },
+  menuDesplegado: {
+    // Los botones aparecen antes (arriba) del principal, 
+    // o puedes ponerlos después para que bajen.
+    alignItems:"center",
+    marginBottom: 8, 
+    gap: 10,          
+  },
+  btnPrincipal: {
+    backgroundColor: '#333', // Un color neutro o el de tu app
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+  },
+  // estilos de exit y idioma :
+  idioma:{
+    top:5,   // Separación del borde inferior
+     
+    marginTop:5,
+    backgroundColor: '#22c5aa', // Color de fondo del botón
+    width: 45,
+    height: 45,
+    borderRadius: 28,     // Hace que sea circular
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,         // Sombra en Android
+    shadowColor: '#000',  // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,  
+  },
+  btnsalir: {
+    backgroundColor: "#f30a0a9c",
+    marginTop:5,
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+// ///////////////////////////////////////////////
   container: {
     flex: 1,
     backgroundColor: "#e4f5f3",
@@ -206,15 +318,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 22,
     color: "#069488",
-  },
-  btnsalir: {
-    backgroundColor: "#f30a0a9c",
-    marginRight: 15,
-    height: 40,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
   },
   title: {
     fontSize: 20,
