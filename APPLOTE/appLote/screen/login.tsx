@@ -11,7 +11,11 @@ import { Video } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
-import loginCambiarContraseña from "./Login/loginCambiarContraseña";
+
+// imports para idiomas 
+import Fontisto from "@expo/vector-icons/Fontisto";
+import i18n, {changeLanguage} from "../i18n";
+import { Languages } from "../localizacion";
 
 const API_URL = "http://10.55.241.207:90";
 const login = ({ navigation }) => {
@@ -55,16 +59,37 @@ const login = ({ navigation }) => {
     }
   };
 
+
+  // funcion de idiomas 
+  const [language,setlanguage] = useState<Languages>("es");
+  const handlechangeLanguage = ()=> {
+    const lang: Languages = language === "en" ? "es" :"en";
+    changeLanguage(lang);
+    setlanguage(lang);
+  }
+
+
   return (
     <LinearGradient
       colors={["#069488", "#a1f3ec", "#069488"]}
       style={styles.contenedor}
     >
       <View style={styles.card}>
+
+        <View style={styles.idioma}>
+          <TouchableOpacity onPress={handlechangeLanguage}>
+            <Fontisto name="world-o" size={25}/>
+          </TouchableOpacity>
+        </View>
+
         <Image source={require("../img/logoLote.webp")} style={styles.logo} />
+
         <View style={{alignItems:'center',marginBottom:20}}>
-          <Text style={styles.title}>Bienvenido</Text>
-          <Text style={styles.subtitle}>Aplicativo de venta de Lotes, Tu lote seguro</Text>
+
+          <Text style={styles.title}>{i18n.t("title")}</Text>
+
+          <Text style={styles.subtitle}>{i18n.t("subtitle")}</Text>
+        
         </View>
         
 
@@ -75,7 +100,7 @@ const login = ({ navigation }) => {
             keyboardType="email-addres"
             autoCorrect={false}
             style={styles.inputcontrol}
-            placeholder="Email"
+            placeholder={i18n.t("Email")}
             value={Correo}
             onChangeText={(text) => setEmail(text)}
           />
@@ -86,7 +111,7 @@ const login = ({ navigation }) => {
           <TextInput
             secureTextEntry={!icon}
             style={styles.inputcontrol}
-            placeholder="Password"
+            placeholder={i18n.t("pswd")}
             value={Contraseña}
             onChangeText={(text) => setPassword(text)}
             placeholderTextColor={"gray"}
@@ -100,7 +125,7 @@ const login = ({ navigation }) => {
           />
         </View>
         <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-          <Text>Iniciar Login</Text>
+          <Text style={{color:"#fff", fontWeight:'bold', fontSize:16}}>{i18n.t("btnLogin")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -108,16 +133,17 @@ const login = ({ navigation }) => {
           onPress={() => navigation.replace("loginRegistrate")}
         >
           <Text style={styles.btnText}>
-            ¿No tienes una cuenta? Registrate aqui...
+            {i18n.t("register")}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.btnCambiar}
+          activeOpacity={0.7}
           onPress={() => navigation.replace("loginCambiarContraseña")}
         >
           <Text style={styles.btnText}>
-            No puedes acceder?, Contactanos aqui.
+            {i18n.t("suport")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -129,6 +155,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  idioma:{
+    position: 'absolute',
+
+    top: 20,           // Separación del borde inferior
+    right: 20,   
+             // Separación del borde derecho
+    backgroundColor: '#22c5aa', // Color de fondo del botón
+    width: 56,
+    height: 56,
+    borderRadius: 28,     // Hace que sea circular
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,         // Sombra en Android
+    shadowColor: '#000',  // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,  
   },
   card: {
     position: "absolute",

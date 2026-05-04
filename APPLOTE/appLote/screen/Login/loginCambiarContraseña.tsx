@@ -7,9 +7,14 @@ import {
   Alert,
   Platform,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRoute } from "@react-navigation/native";
+
+// imports para idiomas 
+import Fontisto from "@expo/vector-icons/Fontisto";
+import { Languages } from "../../localizacion";
+import i18n, {changeLanguage} from "../../i18n";
 
 const loginCambiarContraseña = ({ navigation }) => {
   const route = useRoute();
@@ -43,19 +48,36 @@ const loginCambiarContraseña = ({ navigation }) => {
       );
     });
   };
+
+  // funcion de idiomas 
+    const [language,setlanguage] = useState<Languages>("es");
+    const handlechangeLanguage = ()=> {
+      const lang: Languages = language === "en" ? "es" :"en";
+      changeLanguage(lang);
+      setlanguage(lang);
+    }
+  
+
   return (
     <LinearGradient
       colors={["#069488", "#a1f3ec", "#069488"]}
       style={styles.container}
     >
       <View style={styles.card}>
+
+        <View style={styles.idioma}>
+          <TouchableOpacity onPress={handlechangeLanguage}>
+            <Fontisto name="world-o" size={25}/>
+          </TouchableOpacity>
+        </View>
+
         <Text style={styles.title}>
-          Haz clik en cualquiera de nuestros numeros disponibles:
+          {i18n.t("titleSuport")}
         </Text>
         <Text
-          style={{ marginBottom: 10, fontWeight: "bold", color: "#069488" }}
+          style={{ marginBottom: 10, fontWeight: "bold", fontSize:15, color: "#069488" }}
         >
-          Horario de atencion 8:00am - 5:00pm.
+          {i18n.t("msjbss")}
         </Text>
         {ASESORES.map((asesor) => (
           <TouchableOpacity
@@ -72,7 +94,7 @@ const loginCambiarContraseña = ({ navigation }) => {
           style={styles.regresar}
           onPress={() => navigation.replace("Login")}
         >
-          <Text>Regresar</Text>
+          <Text style={{color:"#fff", fontWeight:"bold"}}>{i18n.t("Comeback")}</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -85,7 +107,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  idioma:{
+    position: 'absolute',
+
+    top: 10,           // Separación del borde inferior
+    right: 10,   
+             // Separación del borde derecho
+    backgroundColor: '#22c5aa', // Color de fondo del botón
+    width: 56,
+    height: 56,
+    borderRadius: 28,     // Hace que sea circular
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,         // Sombra en Android
+    shadowColor: '#000',  // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,  
+  },
   card: {
+    paddingTop:35,
     elevation: 50,
     width: "90%",
     height: "85%",
@@ -124,8 +166,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#09caba",
     padding: 10,
     justifyContent: "center",
+    alignItems:"center",
     height: 40,
-    width: 80,
+    width: 90,
     borderRadius: 10,
     marginTop: "auto",
   },

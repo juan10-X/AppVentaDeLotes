@@ -9,6 +9,12 @@ import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 
+// imports para idiomas 
+import Fontisto from "@expo/vector-icons/Fontisto";
+import i18n, {changeLanguage}  from "../../i18n";
+import { Languages } from "../../localizacion";
+
+
 const API_URL = "http://10.55.241.207:90";
 
 const loginRegistrate = ({ navigation }) => {
@@ -54,41 +60,58 @@ const loginRegistrate = ({ navigation }) => {
       alert("No se pudo conectar con el servidor. Revisa tu conexión.");
     }
   };
+
+  // funcion de idiomas 
+  const [language,setlanguage] = useState<Languages>("es");
+  const handlechangeLanguage = ()=> {
+    const lang: Languages = language === "en" ? "es" :"en";
+    changeLanguage(lang);
+    setlanguage(lang);
+  }
+  
   return (
     <LinearGradient
       colors={["#069488", "#a1f3ec", "#069488"]}
       style={styles.container}
     >
       <View style={styles.card}>
-        <Text style={styles.title}>Registrate:</Text>
+
+        <View style={styles.idioma}>
+          <TouchableOpacity onPress={handlechangeLanguage}>
+            <Fontisto name="world-o" size={25}/>
+          </TouchableOpacity>
+        </View>
+        
+
+        <Text style={styles.title}>{i18n.t("Register")}</Text>
         <TextInput
-          placeholder="Nombre"
+          placeholder={i18n.t("iptNom")}
           value={nombre}
           onChangeText={setNombre}
           style={styles.input}
         />
         <TextInput
-          placeholder="Correo"
+          placeholder={i18n.t("iptCor")}
           value={correo}
           onChangeText={setCorreo}
           style={styles.input}
         />
         <TextInput
-          placeholder="Contraseña"
+          placeholder={i18n.t("iptCon")}
           value={contraseña}
           onChangeText={setContraseña}
           secureTextEntry
           style={styles.input}
         />
         <TextInput
-          placeholder="Celular"
+          placeholder={i18n.t("iptCel")}
           value={celular}
           onChangeText={setCelular}
           style={styles.input}
         />
         <TouchableOpacity onPress={Registro} style={styles.btregistro}>
           <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
-            Registrar
+            {i18n.t("btnRegister")}
           </Text>
         </TouchableOpacity>
 
@@ -96,7 +119,7 @@ const loginRegistrate = ({ navigation }) => {
           style={styles.regresar}
           onPress={() => navigation.replace("Login")}
         >
-          <Text>Regresar</Text>
+          <Text style={{color:"#fff", fontWeight:"bold"}}>{i18n.t("Comeback")}</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -108,7 +131,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  idioma:{
+    position: 'absolute',
+
+    top: 10,           // Separación del borde inferior
+    right: 20,   
+             // Separación del borde derecho
+    backgroundColor: '#22c5aa', // Color de fondo del botón
+    width: 56,
+    height: 56,
+    borderRadius: 28,     // Hace que sea circular
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,         // Sombra en Android
+    shadowColor: '#000',  // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,  
+  },
   card: {
+    paddingTop:32,
     elevation: 50,
     width: "90%",
     height: "85%",
@@ -145,8 +188,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#09caba",
     padding: 10,
     justifyContent: "center",
+    alignItems:"center",
     height: 40,
-    width: 80,
+    width: 90,
     borderRadius: 10,
     marginTop: "auto",
   },
