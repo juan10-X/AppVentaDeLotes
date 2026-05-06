@@ -14,10 +14,30 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const { height } = Dimensions.get('window');
-const API_URL = "http://10.90.221.207:90";
+// imports para idiomas 
+import Fontisto from "@expo/vector-icons/Fontisto";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import i18n, {changeLanguage} from "../i18n";
+import { Languages } from "../localizacion";
 
-const Ventas = ({  route }) => {
+const { height } = Dimensions.get('window');
+const API_URL = "http://10.246.197.207:90";
+
+
+const Ventas = ({ navigation, route }) => {
+  
+  // funcion de idiomas //////////////////////////////////////////////
+  
+      const [isMenuOpen, setIsMenuOpen] = useState(false);
+      const [language,setlanguage] = useState<Languages>("es");
+      const handlechangeLanguage = ()=> {
+        const lang: Languages = language === "en" ? "es" :"en";
+        changeLanguage(lang);
+        setlanguage(lang);
+      }  
+      
+  ///////////////////////////////////////////////////////////////////
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedVentaLocal, setSelectedVentaLocal] = useState(null);
 
@@ -134,6 +154,17 @@ const Ventas = ({  route }) => {
     setCronograma(filtrarCronogramaPorVenta(venta));
   };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const cerrarSesion = () => {
+    // Simplemente redirigimos y reseteamos el historial
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }], // Cambia 'Login' por el nombre exacto de tu pantalla inicial
+    });
+  };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   return (
     <View style={styles.mainContainer}>
       {/* --- LISTA DE VENTAS (CONTENEDOR FIJO) --- */}
@@ -142,7 +173,43 @@ const Ventas = ({  route }) => {
           <Text style={styles.title}>Mis Ventas</Text>
           <MaterialCommunityIcons name="sign-real-estate" size={28} color="#069488" />
         </View>
+        {/* ///////////////////////////////////////////////////////////////////////////////////////// */}
+  {/* funcion de boton desplegable patra idioma y exit */}
+
+      <View style={styles.containerFlotante}>
+        <TouchableOpacity 
+          style={styles.btnPrincipal} 
+          onPress={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <MaterialIcons 
+          name={isMenuOpen ? "close" : "menu"} // Puedes usar menu/close o flechas
+          size={28} 
+          color="white" 
+          />
+        </TouchableOpacity>
+        {isMenuOpen && (
+          <View style={styles.menuDesplegado}>
+
+            <View>
+              <TouchableOpacity style={styles.idioma} onPress={handlechangeLanguage}>
+                <Fontisto name="world-o" size={25}/>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity style={styles.btnsalir} onPress={cerrarSesion}>
+                <MaterialIcons
+                name="exit-to-app"
+                size={28}
+                color="white"
+                />
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        )}
         
+      </View>
+  {/* ///////////////////////////////////////////////////////////////////////////////////////// */}
         <Text style={styles.sectionTitle}>Toca una venta para ver el cronograma</Text>
         
         <ScrollView 
@@ -222,18 +289,25 @@ const Ventas = ({  route }) => {
               <ScrollView contentContainerStyle={styles.modalScroll}>
                 <View style={styles.grid}>
                   {cronograma.map((item, i) => (
-                    <View key={i} style={styles.miniCard}>
-                      <View style={styles.cuotaHeader}>
-                        <Text style={styles.cuotaTitle}>Cuota {i + 1}</Text>
-                        <MaterialCommunityIcons 
-                          name={item.EstadoCuota === 'Pagado' ? "check-decagram" : "clock-outline"} 
-                          size={16} 
-                          color={item.EstadoCuota === 'Pagado' ? "#27ae60" : "#f39c12"} 
-                        />
-                      </View>
-                      <Text style={styles.cuotaMonto}>${item.MontoCuota}</Text>
-                      <Text style={styles.cuotaFecha}>{item.FechaVencimiento}</Text>
-                    </View>
+                    <TouchableOpacity 
+    key={i} 
+    style={styles.miniCard} 
+    onPress={() => {
+      setModalVisible(false); // Cierra el modal actual
+      navigation.navigate("DetallePago", { cuota: item, onRefresh: () => cargarDatosIniciales() }); // Te lleva a la nueva pantalla
+    }}
+  >
+    <View style={styles.cuotaHeader}>
+      <Text style={styles.cuotaTitle}>Cuota {i + 1}</Text>
+      <MaterialCommunityIcons 
+        name={item.EstadoCuota === 'Pagado' ? "check-decagram" : "clock-outline"} 
+        size={16} 
+        color={item.EstadoCuota === 'Pagado' ? "#27ae60" : "#f39c12"} 
+      />
+    </View>
+    <Text style={styles.cuotaMonto}>${item.MontoCuota}</Text>
+    <Text style={styles.cuotaFecha}>{item.FechaVencimiento}</Text>
+  </TouchableOpacity>
                   ))}
                 </View>
               </ScrollView>
@@ -246,6 +320,62 @@ const Ventas = ({  route }) => {
 }; 
 
 const styles = StyleSheet.create({
+   // estilos para boton desplegable
+  containerFlotante: {
+    position: 'absolute',
+    top: 40,           // Ajusta según la pantalla
+    right: 20,
+    zIndex: 999,       // Siempre al frente
+    alignItems: 'center',
+    
+    
+  },
+  menuDesplegado: {
+    // Los botones aparecen antes (arriba) del principal, 
+    // o puedes ponerlos después para que bajen.
+    alignItems:"center",
+    marginBottom: 8, 
+    gap: 10,          
+  },
+  btnPrincipal: {
+    backgroundColor: '#333', // Un color neutro o el de tu app
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+  },
+    // estilos de exit y idioma :
+  idioma:{
+    top:5,   // Separación del borde inferior
+    
+    marginTop:5,
+    backgroundColor: '#22c5aa', // Color de fondo del botón
+    width: 45,
+    height: 45,
+    borderRadius: 28,     // Hace que sea circular
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,         // Sombra en Android
+    shadowColor: '#000',  // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,  
+  },
+  btnsalir: {
+    backgroundColor: "#f30a0a9c",
+    marginTop:5,
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+// ///////////////////////////////////////////////
   mainContainer: { flex: 1, backgroundColor: "#e4f5f3" },
   ventasContainer: {
     height: height * 0.6, // Ocupa el 60% de la pantalla

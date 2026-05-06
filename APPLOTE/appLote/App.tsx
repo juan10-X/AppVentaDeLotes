@@ -17,9 +17,12 @@ import ModificarCliente from "./screen/Clientes/ModificarCliente";
 import RegistrarCliente from "./screen/Clientes/RegistrarCliente";
 import ModificarAsesor from "./screen/Asesor/ModificarAsesor";
 import RegistrarAsesor from "./screen/Asesor/RegistrarAsesor";
-import ListarProyectos from "./screen/Proyectos/ListarProyectos";
+import ListarProyectos from "./screen/ListarProyectos";
 import RegistrarLote from "./screen/Lotes/RegistrarLote";
 import RegistrarVenta from "./screen/Ventas/RegistrarVenta";
+import ModificarUsuario from "./screen/Usuarios/ModificarUsuario";
+import RegistrarUsuario from "./screen/Usuarios/RegistrarUsuario";
+import DetallePago from "./screen/DetallePago";
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -47,10 +50,12 @@ export default function App() {
         <Stack.Screen name="ListarProyectos" component={ListarProyectos} />
         <Stack.Screen name="RegistrarVenta" component={RegistrarVenta} />
         <Stack.Screen name="RegistrarLote" component={RegistrarLote} />
+        <Stack.Screen name="ModificarUsuario" component={ModificarUsuario} />
+        <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
+        <Stack.Screen name="DetallePago" component={DetallePago} />
         <Stack.Screen name="MainTabs" component={bottomTabs} />
       </Stack.Navigator>
     </NavigationContainer>
-    
   );
 }
 

@@ -1,19 +1,19 @@
- import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 
 import home from "./screen/home";
-import proyectos from "./screen/proyectos";
-import ListarProyectos from "./screen/Proyectos/ListarProyectos";
+
+import ListarProyectos from "./screen/ListarProyectos";
 
 import clientes from "./screen/clientes";
 import asesor from "./screen/asesor";
 import Ventas from "./screen/Ventas";
 import login from "./screen/login";
+import usuario from "./screen/usuario";
 import i18n from "./i18n";
-
 const Tab = createBottomTabNavigator();
 
 const bottomTabs = ({ route }) => {
@@ -56,6 +56,23 @@ const bottomTabs = ({ route }) => {
           ),
         }}
       />
+      {rol !== "Cliente" && (
+        <Tab.Screen
+         name={i18n.t("btusuario")}
+         component={usuario}
+         initialParams={{ rol, nombre, idUsuario }}
+         options={{
+           tabBarIcon: ({ color, size }) => (
+             <MaterialCommunityIcons
+               name="account-circle"
+               color={color}
+               size={size}
+             />
+           ),
+         }}
+       />
+
+      )}
       {rol !== "Cliente" && (
         <Tab.Screen
          name={i18n.t("btAsesor")}

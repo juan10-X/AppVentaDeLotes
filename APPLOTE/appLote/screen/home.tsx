@@ -15,15 +15,31 @@ import { symbolicate } from "react-native/types_generated/Libraries/LogBox/Data/
 import Animated from "react-native-reanimated";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
+// imports para idiomas 
+import Fontisto from "@expo/vector-icons/Fontisto";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import i18n, {changeLanguage} from "../i18n";
+import { Languages } from "../localizacion";
+
 const screenWidth = Dimensions.get("window").width;
 
-const API_URL = "http://10.90.221.207:90";
+const API_URL = "http://10.246.197.207:90";
+
 
 const home = ({ route, navigation }) => {
   const tabBarHeight = useBottomTabBarHeight();
   const { nombre, rol } = route.params || {};
   // Aseguramos que route.params exista
   // console.log("rol recibido:", rol);// Aseguramos que route.params exista
+  
+  // funcion de idiomas 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [language,setlanguage] = useState<Languages>("es");
+    const handlechangeLanguage = ()=> {
+      const lang: Languages = language === "en" ? "es" :"en";
+      changeLanguage(lang);
+      setlanguage(lang);
+    }
 
   const [datos, setDatos] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -101,17 +117,49 @@ const home = ({ route, navigation }) => {
       >
         <View style={styles.headerContainer}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.textheader}>Bienvenido:</Text>
+            <Text style={styles.textheader}>{i18n.t("Dtitle")}</Text>
             <Text style={styles.textheader2}>{nombre || "Usuario"}</Text>
           </View>
-          <View>
-            <TouchableOpacity style={styles.btnsalir} onPress={cerrarSesion}>
-              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>
-                salir
-              </Text>
-            </TouchableOpacity>
-          </View>
+      
         </View>
+  {/* ///////////////////////////////////////////////////////////////////////////////////////// */}
+  {/* funcion de boton desplegable patra idioma y exit */}
+
+      <View style={styles.containerFlotante}>
+        <TouchableOpacity 
+          style={styles.btnPrincipal} 
+          onPress={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <MaterialIcons 
+          name={isMenuOpen ? "close" : "menu"} // Puedes usar menu/close o flechas
+          size={28} 
+          color="white" 
+          />
+        </TouchableOpacity>
+        {isMenuOpen && (
+          <View style={styles.menuDesplegado}>
+
+            <View>
+              <TouchableOpacity style={styles.idioma} onPress={handlechangeLanguage}>
+                <Fontisto name="world-o" size={25}/>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity style={styles.btnsalir} onPress={cerrarSesion}>
+                <MaterialIcons
+                name="exit-to-app"
+                size={28}
+                color="white"
+                />
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        )}
+        
+      </View>
+  {/* ///////////////////////////////////////////////////////////////////////////////////////// */}
+
       </View>
       <ScrollView
         style={{ flexGrow: 1 }}
@@ -128,18 +176,18 @@ const home = ({ route, navigation }) => {
             // refreshing={refreshing}
             // onRefresh={cargarDashboard} />}
           >
-            <Text style={styles.header}>Dashboard de Ventas</Text>
+            <Text style={styles.header}>{i18n.t("Dmsj")}</Text>
 
             {/* Zona de Dinero */}
 
             <View style={styles.mainBox}>
-              <Text style={styles.mainTitle}>Cartera Total por Cobrar</Text>
+              <Text style={styles.mainTitle}>{i18n.t("Dmsj2")}</Text>
               <Text style={styles.mainAmount}>
                 S/ {datos?.CarteraTotalFutura || "0.00"}
               </Text>
             </View>
             <View style={styles.chartBox}>
-              <Text style={styles.chartTitle}>Ocupación de Lotes</Text>
+              <Text style={styles.chartTitle}>{i18n.t("Dmsj3")}</Text>
               <PieChart
                 data={pieData} // <--- AQUÍ ES DONDE SE LLAMA A LA CONSTANTE
                 width={screenWidth - 60}
@@ -157,62 +205,35 @@ const home = ({ route, navigation }) => {
             {/* Grid de Métricas */}
             <View style={styles.grid}>
               <DashCard
-                titulo="Recaudado"
+                titulo={i18n.t("card1")}
                 valor={`S/ ${datos?.RecaudadoHistorico}`}
                 icono="cash-check"
                 color="#4CAF50"
               />
 
               <DashCard
-                titulo="Mora Hoy"
+                titulo={i18n.t("card2")}
                 valor={`S/ ${datos?.DineroVencidoHoy}`}
                 icono="alert-circle"
                 color="#F44336"
               />
 
               <DashCard
-                titulo="Lotes"
+                titulo={i18n.t("card3")}
                 valor={`${datos?.TotalVendidos} / ${datos?.TotalLotes}`}
                 icono="home-group"
                 color="#2196F3"
               />
 
               <DashCard
-                titulo="Deudas"
+                titulo={i18n.t("card4")}
                 valor={datos?.CantidadDeudores}
                 icono="account-alert"
                 color="#FF9800"
               />
             </View>
 
-            <Text
-              style={{
-                marginTop: 20,
-                fontWeight: "bold",
-                color: "#069488",
-                fontSize: 18,
-              }}
-            >
-              Gestion de Usuarios:
-            </Text>
-            <View style={styles.grid}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Rproyecto", { nombre, rol })
-                }
-                style={styles.btnRegistrar}
-              >
-                <Text style={styles.btnRegisText}>Registrar</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.btnModificar}>
-                <Text style={styles.btnRegisText}>Modificar</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.btnAnular}>
-                <Text style={styles.btnRegisText}>Anular</Text>
-              </TouchableOpacity>
-            </View>
+           
 
             <View style={{ height: tabBarHeight + 20 }}></View>
           </View>
@@ -223,15 +244,64 @@ const home = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+
+  // estilos para boton desplegable
+  containerFlotante: {
+    position: 'absolute',
+    top: 40,           // Ajusta según la pantalla
+    right: 20,
+    zIndex: 999,       // Siempre al frente
+    alignItems: 'center',
+    
+    
+  },
+  menuDesplegado: {
+    // Los botones aparecen antes (arriba) del principal, 
+    // o puedes ponerlos después para que bajen.
+    alignItems:"center",
+    marginBottom: 8, 
+    gap: 10,          
+  },
+  btnPrincipal: {
+    backgroundColor: '#333', // Un color neutro o el de tu app
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+  },
+  // estilos de exit y idioma :
+  idioma:{
+    top:5,   // Separación del borde inferior
+    
+    marginTop:5,
+    backgroundColor: '#22c5aa', // Color de fondo del botón
+    width: 45,
+    height: 45,
+    borderRadius: 28,     // Hace que sea circular
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,         // Sombra en Android
+    shadowColor: '#000',  // Sombra en iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,  
+  },
   btnsalir: {
     backgroundColor: "#f30a0a9c",
-    marginRight: 15,
+    marginTop:5,
     height: 40,
-    width: 60,
+    width: 40,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
   },
+// ///////////////////////////////////////////////
+  
   headerContainer: {
     position: "relative",
     top: 0,

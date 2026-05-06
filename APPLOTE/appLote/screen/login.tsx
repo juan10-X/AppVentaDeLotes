@@ -17,7 +17,9 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import i18n, {changeLanguage} from "../i18n";
 import { Languages } from "../localizacion";
 
-const API_URL = "http://10.90.221.207:90";
+
+const API_URL = "http://10.246.197.207:90";
+
 const login = ({ navigation }) => {
   const [Correo, setEmail] = useState("");
   const [Contraseña, setPassword] = useState("");

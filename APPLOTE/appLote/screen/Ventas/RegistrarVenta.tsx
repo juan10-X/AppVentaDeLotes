@@ -9,7 +9,8 @@ import {
   StyleSheet,
 } from "react-native";
 
-const API_URL = "http://10.55.241.207:90";
+const API_URL = "http://10.28.32.207:90";
+
 
 const RegistrarVenta = ({ route, navigation }) => {
   const {

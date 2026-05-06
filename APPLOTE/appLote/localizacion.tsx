@@ -26,7 +26,16 @@ export  const traslations={
         btusuario:"Users",
         btAsesor:"Advisors",
         btcliente:"Customers",
-        btVentas:"Sales"
+        btVentas:"Sales",
+        // texto para el dashboard
+        Dtitle:"Welcome:",
+        Dmsj:"Sales Dashboard",
+        Dmsj2:"Total Accounts Receivable",
+        Dmsj3:"Occupation of Lots",
+        card1:"Collected",
+        card2:"Mora Today",
+        card3:"Lots",
+        card4:"Debts"
     },
 
     es:{
@@ -56,8 +65,16 @@ export  const traslations={
         btusuario:"Usuarios",
         btAsesor:"Asesores",
         btcliente:"Clientes",
-        btVentas:"Ventas"
-
+        btVentas:"Ventas",
+        // texto para el dashboard
+        Dtitle:"Bienvenido",
+        Dmsj:"Panel de Ventas",
+        Dmsj2:"Cartera Total por Cobrar",
+        Dmsj3:"Ocupación de Lotes",
+        card1:"Recaudado",
+        card2:"Mora Hoy",
+        card3:"Lotes",
+        card4:"Deudas",
     }
 }
 
